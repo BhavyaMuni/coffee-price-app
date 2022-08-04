@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Float, DateTime, func
-from database import Base
+from .database import Base
 
 class Record(Base):
     __tablename__ = "coffee"

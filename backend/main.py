@@ -5,6 +5,8 @@ from sqlalchemy.orm import Session
 from starlette.responses import RedirectResponse
 import csv
 
+from backend.load_database import load_database
+
 from . import models, schemas
 
 from .database import SessionLocal, engine, get_db
@@ -17,6 +19,8 @@ app = FastAPI()
 
 # model = pickle.load(open("model.pkl", "rb"))
 
+load_database()
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -25,25 +29,11 @@ app.add_middleware(
     allow_credentials=True,
 )
 
-def load_database():
-    db = SessionLocal()
-
-    with open("/app/./backend/coffee.csv", "r") as f:
-        csv_reader = csv.DictReader(f)
-        for r in csv_reader:
-            rec = models.Record(date=datetime.strptime(r["Date"], "%Y-%m-%d"), open=float(r["Open"]), close=float(r["Close"]), high=float(r["High"]), low=float(r["Low"]), volume=float(r["Volume"]))
-            db.add(rec)
-        
-        db.commit()
-    db.close()
-    
-load_database()
-
 @app.get("/")
 async def root():
     return RedirectResponse(url="/docs/")
 
-@app.post("/records/", response_model=schemas.RecordSchema)
-async def post(db: Session = Depends(get_db)):
-    rec = db.query(models.Record).first()
+@app.get("/records/{date}", response_model=schemas.RecordSchema)
+async def post(date: str, db: Session = Depends(get_db)):
+    rec = db.query(models.Record).filter(models.Record.date == datetime.strptime(date, "%Y-%m-%d")).first()
     return rec

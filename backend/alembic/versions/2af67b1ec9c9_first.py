@@ -7,8 +7,8 @@ Create Date: 2022-07-29 16:36:36.615559
 """
 from alembic import op
 import sqlalchemy as sa
-
-
+from datetime import datetime
+import csv
 # revision identifiers, used by Alembic.
 revision = '2af67b1ec9c9'
 down_revision = None
@@ -36,3 +36,14 @@ def downgrade() -> None:
     op.drop_index(op.f('ix_coffee_date'), table_name='coffee')
     op.drop_table('coffee')
     # ### end Alembic commands ###
+
+
+def data_upgrades():
+    table = table('coffee')
+    recs = []
+    with open("/app/backend/coffee.csv", "r") as f:
+        csv_reader = csv.DictReader(f)
+        for r in csv_reader:
+            recs.append({'date':datetime.strptime(r["Date"], "%Y-%m-%d"), 'open':float(r["Open"]), 'close':float(r["Close"]), 'high':float(r["High"]), 'low':float(r["Low"]), 'volume':float(r["Volume"])})
+    
+    op.bulk_insert(table, recs)

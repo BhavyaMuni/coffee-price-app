@@ -1,8 +1,9 @@
 from sqlalchemy import Column, Float, DateTime, func
-from .database import Base
+from backend.database import Base
 
 class Record(Base):
     __tablename__ = "coffee"
+    __table_args__ = {'extend_existing': True} 
 
     date = Column(DateTime, primary_key=True, index=True)
     open = Column(Float)

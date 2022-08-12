@@ -1,14 +1,10 @@
 import "./App.css";
-import CoffeePrice from "./components/GetCoffeePrice";
-import { ChakraProvider, Input } from "@chakra-ui/react";
+
+import InputDate from "./components/GetCoffeePrice";
 
 function App() {
-  return (
-    <ChakraProvider>
-      <h1>Hello, worlds</h1>
-      <CoffeePrice></CoffeePrice>
-    </ChakraProvider>
-  );
+  //   const [date, setDate] = useState(new Date("2000-01-03"));
+  return <InputDate />;
 }
 
 export default App;

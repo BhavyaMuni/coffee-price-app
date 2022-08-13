@@ -1,4 +1,5 @@
 from datetime import datetime
+from json import load
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
@@ -19,7 +20,10 @@ app = FastAPI()
 
 # model = pickle.load(open("model.pkl", "rb"))
 
-load_database()
+try:
+    load_database()
+except Exception:
+    print("error")
 
 app.add_middleware(
     CORSMiddleware,

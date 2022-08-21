@@ -8,6 +8,7 @@ class RecordSchema(BaseModel):
     low : float
     close : float
     volume : float
+    predicted_close: float
 
     class Config:
         orm_mode = True

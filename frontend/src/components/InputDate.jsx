@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { TextField, Button, Container, Grid } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers";
+import { TextField, Button, Grid } from "@mui/material";
 import DisplayResponse from "./DisplayResponse";
 const axios = require("axios");
 
@@ -9,7 +9,9 @@ function InputDate() {
   const [res, setRes] = useState(null);
 
   const logApi = (dateString) => {
-    axios.get("/api/records/" + dateString).then((res) => setRes(res.data));
+    axios
+      .get("http://localhost:8000/records/" + dateString)
+      .then((res) => setRes(res.data));
     // console.log(dateString);
   };
 

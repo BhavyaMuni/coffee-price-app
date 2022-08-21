@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Float, DateTime, func
+from sqlalchemy import Column, Float, DateTime
 from backend.database import Base
 
 class Record(Base):

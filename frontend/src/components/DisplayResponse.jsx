@@ -1,52 +1,90 @@
-import { Container, Typography } from "@mui/material";
-import { ResponsiveContainer, XAxis, YAxis, LineChart, Line } from "recharts";
+import { Container, Typography, Grid } from "@mui/material";
+// import {  } from "@mui/material/colors";
+import {
+  XYPlot,
+  XAxis,
+  YAxis,
+  VerticalBarSeries,
+  HorizontalGridLines,
+} from "react-vis";
+// import { ResponsiveContainer, XAxis, YAxis, LineChart, Line } from "recharts";
 
 function DisplayResponse({ response }) {
   if (response == null || response === "") {
     return <Typography variant="body"> Please select a valid date.</Typography>;
   } else {
     return (
-      <div>
-        <p>
-          <Typography variant="body">Open: {response.open}</Typography>
-        </p>
-        <p>
-          <Typography variant="body">Close: {response.close}</Typography>
-        </p>
-        <p>
-          <Typography variant="body">Low: {response.low}</Typography>
-        </p>
-        <p>
-          <Typography variant="body">High: {response.high}</Typography>
-        </p>
-        <p>
-          <Typography variant="body">
-            Predicted Close: {response.predicted}
-          </Typography>
-        </p>
-        <Container>
-          <ResponsiveContainer width={500} height={300}>
-            <LineChart
-              data={() => {
-                // response.previous.push({ close: response.predicted });
-                return response.previous;
-              }}
-              margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-            >
-              <Line dataKey="close" stroke="#8884d8"></Line>
-              {/* <Line dataKey="close" stroke="#82ca9d"></Line> */}
-
-              <XAxis
-                dataKey="date"
-                tickFormatter={(tick) => {
-                  return new Date(tick).toDateString().slice(4);
-                }}
+      <Grid
+        container
+        justifyContent={"center"}
+        alignItems={"center"}
+        alignContent={"center"}
+        rowSpacing={8}
+      >
+        <Grid item xs={12}>
+          <Grid
+            container
+            spacing={3}
+            justifyContent={"center"}
+            alignItems={"center"}
+          >
+            <Grid item>
+              <Typography variant="body" textAlign={"center"}>
+                Open: {response.open}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Typography variant="body">Close: {response.close}</Typography>
+            </Grid>
+            <Grid item>
+              <Typography variant="body">Low: {response.low}</Typography>
+            </Grid>
+            <Grid item>
+              <Typography variant="body">High: {response.high}</Typography>
+            </Grid>
+            <Grid item>
+              <Typography variant="body">
+                Predicted Close: {response.predicted}
+              </Typography>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={4}>
+          <Container>
+            <XYPlot width={200} height={200} xType="ordinal">
+              <VerticalBarSeries
+                color="teal"
+                data={[
+                  { x: "Close", y: response.close },
+                  { x: "Predicted", y: response.predicted },
+                ]}
               />
+              <XAxis />
               <YAxis />
-            </LineChart>
-          </ResponsiveContainer>
-        </Container>
-      </div>
+              <HorizontalGridLines />
+            </XYPlot>
+          </Container>
+        </Grid>
+        <Grid item xs={8}>
+          <Container>
+            <XYPlot width={500} height={300} xType="ordinal">
+              <VerticalBarSeries
+                color="lightBlue"
+                data={[
+                  { x: "Open", y: response.open },
+                  { x: "Close", y: response.close },
+                  { x: "High", y: response.high },
+                  { x: "Low", y: response.low },
+                ]}
+              ></VerticalBarSeries>
+
+              <XAxis title={new Date(response.date).toDateString()} />
+              <YAxis />
+              <HorizontalGridLines />
+            </XYPlot>
+          </Container>
+        </Grid>
+      </Grid>
     );
   }
 }
